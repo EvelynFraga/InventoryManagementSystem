@@ -1,51 +1,46 @@
 
+using InventoryManagementSystem.Data;
 using InventoryManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.Services;
 
 public class Inventario
 {
-    private readonly List<Producto> productos = new();
-
     public bool AgregarProducto(Producto producto)
     {
-        foreach (Producto item in productos)
-        {
-            
-if (item.Codigo.Equals(
-    producto.Codigo,
-    StringComparison.OrdinalIgnoreCase))
-{
-    return false;
-}
+        using InventarioDbContext db = new();
 
+        bool existe = db.Productos.Any(p =>
+            p.Codigo == producto.Codigo);
+
+        if (existe)
+        {
+            return false;
         }
 
-        productos.Add(producto);
+        db.Productos.Add(producto);
+        db.SaveChanges();
+
         return true;
     }
 
     public List<Producto> ObtenerProductos()
     {
-        return new List<Producto>(productos);
+        using InventarioDbContext db = new();
+
+        return db.Productos
+            .AsNoTracking()
+            .OrderBy(p => p.Nombre)
+            .ToList();
     }
 
-
-public Producto? BuscarPorCodigo(string codigo)
-{
-    foreach (Producto producto in productos)
+    public Producto? BuscarPorCodigo(string codigo)
     {
-        if (producto.Codigo.Equals(
-            codigo,
-            StringComparison.OrdinalIgnoreCase))
-        {
-            return producto;
-        }
+        using InventarioDbContext db = new();
+
+        return db.Productos
+            .AsNoTracking()
+            .FirstOrDefault(p => p.Codigo == codigo);
     }
-
-    return null;
 }
-
-
-}
-
