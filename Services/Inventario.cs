@@ -11,10 +11,14 @@ public class Inventario
     {
         foreach (Producto item in productos)
         {
-            if (item.Codigo == producto.Codigo)
-            {
-                return false;
-            }
+            
+if (item.Codigo.Equals(
+    producto.Codigo,
+    StringComparison.OrdinalIgnoreCase))
+{
+    return false;
+}
+
         }
 
         productos.Add(producto);
@@ -25,4 +29,23 @@ public class Inventario
     {
         return new List<Producto>(productos);
     }
+
+
+public Producto? BuscarPorCodigo(string codigo)
+{
+    foreach (Producto producto in productos)
+    {
+        if (producto.Codigo.Equals(
+            codigo,
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return producto;
+        }
+    }
+
+    return null;
 }
+
+
+}
+

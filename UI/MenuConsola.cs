@@ -18,6 +18,7 @@ public class MenuConsola
             Console.WriteLine("=== SISTEMA DE INVENTARIO ===");
             Console.WriteLine("1. Registrar producto");
             Console.WriteLine("2. Consultar inventario");
+            Console.WriteLine("3. Buscar producto por código");
             Console.WriteLine("0. Salir");
             Console.WriteLine();
             Console.Write("Seleccione una opción: ");
@@ -33,6 +34,10 @@ public class MenuConsola
                 case "2":
                     MostrarProductos();
                     break;
+
+                case "3":
+                    BuscarProducto();
+                    break;    
 
                 case "0":
                     Console.WriteLine("Finalizando el sistema...");
@@ -124,4 +129,38 @@ public class MenuConsola
             Console.WriteLine("----------------------");
         }
     }
+
+
+
+private void BuscarProducto()
+{
+    Console.WriteLine();
+    Console.WriteLine("--- BUSCAR PRODUCTO ---");
+
+    Console.Write("Ingresá el código: ");
+    string codigo = Console.ReadLine()?.Trim() ?? "";
+
+    if (string.IsNullOrWhiteSpace(codigo))
+    {
+        Console.WriteLine("Error: ingresá un código válido.");
+        return;
+    }
+
+    Producto? producto = inventario.BuscarPorCodigo(codigo);
+
+    if (producto == null)
+    {
+        Console.WriteLine("No se encontró un producto con ese código.");
+        return;
+    }
+
+    Console.WriteLine();
+    Console.WriteLine($"Código: {producto.Codigo}");
+    Console.WriteLine($"Nombre: {producto.Nombre}");
+    Console.WriteLine($"Categoría: {producto.Categoria}");
+    Console.WriteLine($"Ubicación: {producto.Ubicacion}");
+    Console.WriteLine($"Stock actual: {producto.StockActual}");
+    Console.WriteLine($"Stock mínimo: {producto.StockMinimo}");
+}
+
 }
